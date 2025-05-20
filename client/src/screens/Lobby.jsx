@@ -1,5 +1,5 @@
 import React,{useState,useCallback, useEffect, use} from "react";
-import {useSocket} from "../context/socketProvider";
+import {useSocket} from "../context/SocketProvider";
 import {useNavigate} from 'react-router-dom'
 import backVideo from './backVideo.mp4';
 

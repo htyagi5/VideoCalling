@@ -1,6 +1,6 @@
 import React,{ useEffect,useCallback,useState, use} from "react";
 import ReactPlayer from 'react-player'//make possible to play video
-import {useSocket} from "../context/socketProvider";
+import {useSocket} from "../context/SocketProvider";
 import peer from "../services/peer";
 import backVideo from './backVideo.mp4';    
 const RoomPage=()=>{
