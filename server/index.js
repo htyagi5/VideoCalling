@@ -1,24 +1,39 @@
 const http = require("http");
-require('dotenv').config(); // Always at the top if using .env
+const cors = require("cors");
+require('dotenv').config();
 const { Server } = require("socket.io");
+const express = require("express");
+
+const app = express();
 const port = process.env.PORT || 4000;
 
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { "Content-Type": "text/plain" });
-  res.end("Socket.io signaling server is running");
-}); 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://video-calling-8jks.vercel.app"
+];
 
+// Apply CORS to Express server
+app.use(cors({
+  origin: allowedOrigins,
+  methods: ["GET", "POST"]
+}));
+
+const server = http.createServer(app);
+
+// Setup Socket.IO with same CORS
 const io = new Server(server, {
   cors: {
-    // origin: "*", // Or set specific frontend URL
-    origin: [
-  "http://localhost:3000", // local React dev server
-  "https://video-calling-8jks.vercel.app/" // deployed frontend
-],
+    origin: allowedOrigins,
     methods: ["GET", "POST"]
   }
 });
 
+// Optional: respond to browser if visited directly
+app.get("/", (req, res) => {
+  res.send("Socket.io signaling server is running");
+});
+
+// Socket.IO logic
 const emailtoSocketIdMap = new Map();
 const socketIdtoemailMap = new Map();
 
