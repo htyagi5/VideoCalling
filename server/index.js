@@ -2,10 +2,18 @@ const http = require("http");
 const { Server } = require("socket.io");
 const port = process.env.PORT || 4000;
 
-const server = http.createServer(); // You must create an HTTP server
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("Socket.io signaling server is running");
+}); 
+
 const io = new Server(server, {
   cors: {
-    origin: "*", // Or set specific frontend URL
+    // origin: "*", // Or set specific frontend URL
+    origin: [
+  "http://localhost:3000", // local React dev server
+  "https://video-calling-8jks.vercel.app/" // deployed frontend
+],
     methods: ["GET", "POST"]
   }
 });
