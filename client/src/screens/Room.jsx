@@ -110,14 +110,14 @@ useEffect(()=>{
             { remoteSocketId &&  <button onClick={handleCallUser}>Call</button>}
             {myStream && <>
             <h1>MY Stream</h1>
-            <ReactPlayer playing muted 
+            <ReactPlayer playing  
             width="600px" height="300px" 
             url={myStream}/>
         
             </>}
             {remoteStream && <>
             <h1>Remote Stream</h1>
-            <ReactPlayer playing muted 
+            <ReactPlayer playing  
             width="600px" height="300px" 
             url={remoteStream}/>
             
