@@ -1,4 +1,5 @@
 const http = require("http");
+require('dotenv').config(); // Always at the top if using .env
 const { Server } = require("socket.io");
 const port = process.env.PORT || 4000;
 
