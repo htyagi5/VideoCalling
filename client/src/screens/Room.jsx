@@ -125,10 +125,10 @@ useEffect(()=>{
   {myStream && (
     <>
       <div className="sender">
-        <ReactPlayer playing muted width="100%" height="100%" url={myStream} />
+        <ReactPlayer playing  width="100%" height="100%" url={myStream} />
       </div>
       <div className="receiver">
-        <ReactPlayer playing muted width="100%" height="100%" url={remoteStream} />
+        <ReactPlayer playing  width="100%" height="100%" url={remoteStream} />
       </div>
     </>
   )}
