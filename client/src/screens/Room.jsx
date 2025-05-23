@@ -1,6 +1,6 @@
 import React,{ useEffect,useCallback,useState, use} from "react";
 import ReactPlayer from 'react-player'//make possible to play video
-import {useSocket} from "../context/SocketProvider";
+import {useSocket} from "../context/socketProvider";
 import peer from "../services/peer";
 import backVideo from './backVideo.mp4';    
 const RoomPage=()=>{
@@ -13,19 +13,19 @@ const RoomPage=()=>{
         setRemoteSocketId(id);
     })
 
+    const [callStarted, setCallStarted] = useState(false);
 
-   const handleCallUser= useCallback(async()=>{
-    const stream=await navigator.mediaDevices.getUserMedia({
-        video:true,
-        audio:true
-    });
-
-    const offer=await peer.getOffer();
-    setMyStream(stream);
-    // ⏱ Delay emit to give other user time to set up listeners
-    setTimeout(() => {
-        socket.emit('call:user',{to:remoteSocketId,offer});
-    }, 1000); // 1 second delay
+  const handleCallUser = useCallback(async () => {
+  const stream = await navigator.mediaDevices.getUserMedia({
+    video: true,
+    audio: true,
+  });
+  const offer = await peer.getOffer();
+  setMyStream(stream);
+  setTimeout(() => {
+    socket.emit('call:user', { to: remoteSocketId, offer });
+  }, 1000);
+  setCallStarted(true); // 👈 Call has started
 }, [remoteSocketId, socket]);
 
 
@@ -42,11 +42,14 @@ const RoomPage=()=>{
         socket.emit("call:accepted",{to:from,answer});
     },[socket]);
 
-    const sendStreams=useCallback(()=>{
-         for(const track of myStream.getTracks()){
-            peer.peer.addTrack(track,myStream);
-         }
-    },[myStream]);
+   const sendStreams = useCallback(() => {
+  for (const track of myStream.getTracks()) {
+    peer.peer.addTrack(track, myStream);
+  }
+  setStreamSent(true);
+  setCallStarted(true); // 👈 Call has started
+}, [myStream]);
+
     const handleCallAccepted=useCallback(async({from,answer})=>{
          await peer.setLocalDescription(answer);
          console.log("Call accepted",from,answer);
@@ -74,6 +77,7 @@ const handleNegoNeedFinal=useCallback(async({answer})=>{
     await peer.setLocalDescription(answer);
 },[]);
 
+const [streamSent, setStreamSent] = useState(false);
 useEffect(()=>{ 
     peer.peer.addEventListener("track",async (e)=>{
         const remoteStream=e.streams[0];
@@ -97,31 +101,39 @@ useEffect(()=>{
             socket.off("peer:nego:final",handleNegoNeedFinal)
         }
     },[socket,handleUserJoined,handleIncomingCall,handleCallAccepted,handleNegoNeedIncoming,handleNegoNeedFinal])
+
+    
+
     return(
-        <div>
-            <h1>Room Page</h1>
-            
-            <video className="backVideo" autoPlay loop muted>
+        <div className="CallPage">
+            <video className="backVideo" autoPlay loop muted >
               <source src={backVideo} type="video/mp4" />
             </video>
+           {!callStarted && (
+  <div className="content">
+    <h2>{remoteSocketId ? 'Welcome, you are Connected' : 'Empty Room'}</h2>
+    {!streamSent && myStream && <button className="btn" onClick={sendStreams}>Send Stream</button>}
+    {remoteSocketId && <button className="btn" onClick={handleCallUser}>Call</button>}
+  </div>
+)}
 
-            <h4>{remoteSocketId?'Welcome,you are Connected':'Empty Room'}</h4>
-            {myStream && <button onClick={sendStreams}>Send Stream</button>}
-            { remoteSocketId &&  <button onClick={handleCallUser}>Call</button>}
-            {myStream && <>
+           <div className="head">
             <h1>MY Stream</h1>
-            <ReactPlayer playing  
-            width="600px" height="300px" 
-            url={myStream}/>
-        
-            </>}
-            {remoteStream && <>
             <h1>Remote Stream</h1>
-            <ReactPlayer playing  
-            width="600px" height="300px" 
-            url={remoteStream}/>
-            
-            </>}
+           </div>
+           <div className={`callSpace ${callStarted ? 'active' : ''}`}>
+  {myStream && (
+    <>
+      <div className="sender">
+        <ReactPlayer playing muted width="100%" height="100%" url={myStream} />
+      </div>
+      <div className="receiver">
+        <ReactPlayer playing muted width="100%" height="100%" url={remoteStream} />
+      </div>
+    </>
+  )}
+</div>
+
         </div>
     )
 }
