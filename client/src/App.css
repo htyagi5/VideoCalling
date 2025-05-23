@@ -1,4 +1,196 @@
-body{
-    color:beige;
-    font-family: 'Courier New', Courier, monospace;
+/* for Lobby  */
+
+/* Reuse if already added */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Courier New', Courier, monospace;
+  color: white;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #000;
 }
+
+.backVideo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+}
+
+/* Centering container */
+.lobby-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Frosted glass effect */
+.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 40px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+
+.glass-card h1 {
+  margin-bottom: 20px;
+}
+
+.glass-card label {
+  display: block;
+  margin: 15px 0 5px;
+  font-size: 16px;
+}
+
+.glass-card input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  font-size: 16px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.glass-card .btn {
+  margin-top: 20px;
+  padding: 12px 24px;
+  font-size: 16px;
+  background-color: #0daf13;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.glass-card .btn:hover {
+  background-color: #0c9010;
+}
+
+
+/* for room */
+body {
+  margin: 0;
+  padding: 0;
+  color: beige;
+  font-family: 'Courier New', Courier, monospace;
+  height: 100vh;
+  overflow: hidden;
+}
+
+
+
+.CallPage {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.callSpace {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  border: 2px solid white;
+}
+
+.callSpace.active {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+  background-color: black;
+}
+
+.sender, .receiver {
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  border: 2px solid white;
+  border-radius: 10px;
+  transform: scaleX(-1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sender video,
+.receiver video,
+.react-player {
+  width: 100%  !important;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+.head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: rgba(0, 0, 0, 0.6);
+  position: absolute;
+  top: 0;
+  z-index: 10;
+}
+
+.btn {
+  background-color: #0daf13;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-left: 20px;
+}
+
+.mainhead {
+  margin-left: 50px;
+}
+
+.backVideo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+
+
+
